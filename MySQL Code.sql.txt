@@ -1,0 +1,326 @@
+create database miniproject;
+use miniproject;
+
+create table user(
+phone_no numeric(10) primary key,
+password varchar(50) not null
+);
+
+mysql> desc user;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| phone_no | decimal(10,0) | NO   | PRI | NULL    |       |
+| password | varchar(50)   | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+2 rows in set (0.05 sec)
+
+create table benificiary (
+benf_id int primary key,
+benf_name varchar(50) not null,
+date_of_birth date not null,
+gender char not null,
+phone_no numeric(10) not null,
+foreign key(phone_no) references user(phone_no)
+);
+
+mysql> desc benificiary;
++---------------+---------------+------+-----+---------+-------+
+| Field         | Type          | Null | Key | Default | Extra |
++---------------+---------------+------+-----+---------+-------+
+| benf_id       | int           | NO   | PRI | NULL    |       |
+| benf_name     | varchar(50)   | NO   |     | NULL    |       |
+| date_of_birth | date          | NO   |     | NULL    |       |
+| gender        | char(1)       | NO   |     | NULL    |       |
+| phone_no      | decimal(10,0) | NO   | MUL | NULL    |       |
++---------------+---------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+create table Vaccination (
+vaccine_id INT PRIMARY KEY,
+vaccine_name VARCHAR(100) not null,
+description TEXT,
+age_group VARCHAR(20) not null
+);
+
+mysql> desc vaccination;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| vaccine_id   | int          | NO   | PRI | NULL    |       |
+| vaccine_name | varchar(100) | NO   |     | NULL    |       |
+| description  | text         | YES  |     | NULL    |       |
+| age_group    | varchar(20)  | NO   |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+
+create table Vaccine_Record (
+record_id INT PRIMARY KEY,
+benf_id INT not null,
+vaccine_id INT not null,
+vaccination_date DATE,
+status VARCHAR(20) not null,
+FOREIGN KEY(benf_id) REFERENCES benificiary(benf_id),
+FOREIGN KEY(vaccine_id) REFERENCES Vaccination(vaccine_id)
+);
+
+mysql> desc vaccine_record;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| record_id        | int         | NO   | PRI | NULL    |       |
+| benf_id          | int         | NO   | MUL | NULL    |       |
+| vaccine_id       | int         | NO   | MUL | NULL    |       |
+| vaccination_date | date        | YES  |     | NULL    |       |
+| status           | varchar(20) | NO   |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+create table reminders (
+reminder_id INT PRIMARY KEY,
+benf_id INT not null,
+vaccine_id INT not null,
+reminder_date DATE not null,
+FOREIGN KEY (benf_id) REFERENCES benificiary(benf_id),
+FOREIGN KEY (vaccine_id) REFERENCES Vaccination(vaccine_id)
+);
+
+mysql> desc reminders;
++---------------+------+------+-----+---------+-------+
+| Field         | Type | Null | Key | Default | Extra |
++---------------+------+------+-----+---------+-------+
+| reminder_id   | int  | NO   | PRI | NULL    |       |
+| benf_id       | int  | NO   | MUL | NULL    |       |
+| vaccine_id    | int  | NO   | MUL | NULL    |       |
+| reminder_date | date | NO   |     | NULL    |       |
++---------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+insert into vaccination values
+(701, 'BCG', 'Prevents Tuberculosis', '0'),
+(702, 'Hepatitis B (Birth Dose)', 'Prevents Hepatitis B', '0'),
+(703, 'OPV (0 Dose)', 'Prevents Polio', '0'),
+(704, 'Hepatitis B (2nd Dose)', 'Prevents Hepatitis B', '0.1'),
+(705, 'OPV (1st Dose)', 'Prevents Polio', '0.1'),
+(706, 'DPT (1st Dose)', 'Prevents Diphtheria, Pertussis, and Tetanus', '0.1'),
+(707, 'Hib (1st Dose)', 'Prevents Haemophilus influenzae type b', '0.1'),
+(708, 'Rotavirus (1st Dose)', 'Prevents Rotavirus infections', '0.1'),
+(709, 'PCV (1st Dose)', 'Prevents Pneumococcal infections', '0.1'),
+(710, 'Hepatitis B (3rd Dose)', 'Prevents Hepatitis B', '0.2'),
+(711, 'OPV (2nd Dose)', 'Prevents Polio', '0.2'),
+(712, 'DPT (2nd Dose)', 'Prevents Diphtheria, Pertussis, and Tetanus', '0.2'),
+(713, 'Hib (2nd Dose)', 'Prevents Haemophilus influenzae type b', '0.2'),
+(714, 'Rotavirus (2nd Dose)', 'Prevents Rotavirus infections', '0.2'),
+(715, 'PCV (2nd Dose)', 'Prevents Pneumococcal infections', '0.2'),
+(716, 'OPV (3rd Dose)', 'Prevents Polio', '0.3'),
+(717, 'DPT (3rd Dose)', 'Prevents Diphtheria, Pertussis, and Tetanus', '0.3'),
+(718, 'Hib (3rd Dose)', 'Prevents Haemophilus influenzae type b', '0.3'),
+(719, 'Rotavirus (3rd Dose)', 'Prevents Rotavirus infections', '0.3'),
+(720, 'PCV (3rd Dose)', 'Prevents Pneumococcal infections', '0.3'),
+(721, 'Measles-Rubella (1st Dose)', 'Prevents Measles and Rubella', '1'),
+(722, 'JE (1st Dose)', 'Prevents Japanese Encephalitis (endemic areas)', '1'),
+(723, 'DPT (1st Booster)', 'Prevents Diphtheria, Pertussis, and Tetanus', '1.5'),
+(724, 'OPV (Booster)', 'Prevents Polio', '1.5'),
+(725, 'Measles-Rubella (2nd Dose)', 'Prevents Measles and Rubella', '1.5'),
+(726, 'JE (2nd Dose)', 'Prevents Japanese Encephalitis (endemic areas)', '1.5'),
+(727, 'PCV (Booster)', 'Prevents Pneumococcal infections', '1.5'),
+(728, 'DPT (2nd Booster)', 'Prevents Diphtheria, Pertussis, and Tetanus', '5'),
+(729, 'Td (10-12 Years)', 'Prevents Tetanus and Diphtheria', '12'),
+(730, 'Td (Booster)', 'Prevents Tetanus and Diphtheria', '16'),
+(731, 'TT (Women of Childbearing Age)', 'Prevents Tetanus and Neonatal Tetanus', '16'),
+(732, 'Influenza', 'Prevents Influenza', '50'),
+(733, 'Zoster', 'Prevents Herpes Zoster', '60'),
+(734, 'Pneumococcal Vaccine', 'Prevents Pneumococcal infections', '60');
+
+
+mysql> select*from vaccination;
++------------+--------------------------------+------------------------------------------------+-----------+
+| vaccine_id | vaccine_name                   | description                                    | age_group |
++------------+--------------------------------+------------------------------------------------+-----------+
+|        701 | BCG                            | Prevents Tuberculosis                          | 0         |
+|        702 | Hepatitis B (Birth Dose)       | Prevents Hepatitis B                           | 0         |
+|        703 | OPV (0 Dose)                   | Prevents Polio                                 | 0         |
+|        704 | Hepatitis B (2nd Dose)         | Prevents Hepatitis B                           | 0.1       |
+|        705 | OPV (1st Dose)                 | Prevents Polio                                 | 0.1       |
+|        706 | DPT (1st Dose)                 | Prevents Diphtheria, Pertussis, and Tetanus    | 0.1       |
+|        707 | Hib (1st Dose)                 | Prevents Haemophilus influenzae type b         | 0.1       |
+|        708 | Rotavirus (1st Dose)           | Prevents Rotavirus infections                  | 0.1       |
+|        709 | PCV (1st Dose)                 | Prevents Pneumococcal infections               | 0.1       |
+|        710 | Hepatitis B (3rd Dose)         | Prevents Hepatitis B                           | 0.2       |
+|        711 | OPV (2nd Dose)                 | Prevents Polio                                 | 0.2       |
+|        712 | DPT (2nd Dose)                 | Prevents Diphtheria, Pertussis, and Tetanus    | 0.2       |
+|        713 | Hib (2nd Dose)                 | Prevents Haemophilus influenzae type b         | 0.2       |
+|        714 | Rotavirus (2nd Dose)           | Prevents Rotavirus infections                  | 0.2       |
+|        715 | PCV (2nd Dose)                 | Prevents Pneumococcal infections               | 0.2       |
+|        716 | OPV (3rd Dose)                 | Prevents Polio                                 | 0.3       |
+|        717 | DPT (3rd Dose)                 | Prevents Diphtheria, Pertussis, and Tetanus    | 0.3       |
+|        718 | Hib (3rd Dose)                 | Prevents Haemophilus influenzae type b         | 0.3       |
+|        719 | Rotavirus (3rd Dose)           | Prevents Rotavirus infections                  | 0.3       |
+|        720 | PCV (3rd Dose)                 | Prevents Pneumococcal infections               | 0.3       |
+|        721 | Measles-Rubella (1st Dose)     | Prevents Measles and Rubella                   | 1         |
+|        722 | JE (1st Dose)                  | Prevents Japanese Encephalitis (endemic areas) | 1         |
+|        723 | DPT (1st Booster)              | Prevents Diphtheria, Pertussis, and Tetanus    | 1.5       |
+|        724 | OPV (Booster)                  | Prevents Polio                                 | 1.5       |
+|        725 | Measles-Rubella (2nd Dose)     | Prevents Measles and Rubella                   | 1.5       |
+|        726 | JE (2nd Dose)                  | Prevents Japanese Encephalitis (endemic areas) | 1.5       |
+|        727 | PCV (Booster)                  | Prevents Pneumococcal infections               | 1.5       |
+|        728 | DPT (2nd Booster)              | Prevents Diphtheria, Pertussis, and Tetanus    | 5         |
+|        729 | Td (10-12 Years)               | Prevents Tetanus and Diphtheria                | 12        |
+|        730 | Td (Booster)                   | Prevents Tetanus and Diphtheria                | 16        |
+|        731 | TT (Women of Childbearing Age) | Prevents Tetanus and Neonatal Tetanus          | 16        |
+|        732 | Influenza                      | Prevents Influenza                             | 50        |
+|        733 | Zoster                         | Prevents Herpes Zoster                         | 60        |
+|        734 | Pneumococcal Vaccine           | Prevents Pneumococcal infections               | 60        |
++------------+--------------------------------+------------------------------------------------+-----------+
+34 rows in set (0.02 sec)
+
+insert into user values
+(9876543210, 'password123'),
+(9123456789, 'securePass456'),
+(9988776655, 'mySecret789'),
+(9123450987, 'safeKey1010'),
+(9001122334, 'pass@word321');
+
+mysql> select*from user;
++------------+---------------+
+| phone_no   | password      |
++------------+---------------+
+| 9001122334 | pass@word321  |
+| 9123450987 | safeKey1010   |
+| 9123456789 | securePass456 |
+| 9876543210 | password123   |
+| 9988776655 | mySecret789   |
++------------+---------------+
+5 rows in set (0.00 sec)
+
+insert into benificiary values
+(101, 'Rohit Sharma', '2022-05-15', 'M', 9876543210),
+(102, 'Priya Singh', '1966-08-20', 'F', 9123456789),
+(103, 'Amit Kumar', '2012-03-10', 'M', 9988776655),
+(104, 'Anjali Verma', '2018-11-05', 'F', 9123450987),
+(105, 'Rajesh Khanna', '2024-07-22', 'M', 9001122334),
+(106, 'Sneha Patel', '1997-04-18', 'F', 9876543210),
+(107, 'Vikram Mehra', '2017-12-02', 'M', 9123456789),
+(108, 'Nisha Rao', '2000-09-29', 'F', 9988776655);
+
+insert into benificiary values
+(109, 'Anshul Koli', '2022-05-15', 'F', 9876543210),
+(110, 'Jaya Nair', '2020-08-20', 'F', 9123456789);
+
+mysql> select*from benificiary;
++---------+---------------+---------------+--------+------------+
+| benf_id | benf_name     | date_of_birth | gender | phone_no   |
++---------+---------------+---------------+--------+------------+
+|     101 | Rohit Sharma  | 2022-05-15    | M      | 9876543210 |
+|     102 | Priya Singh   | 1966-08-20    | F      | 9123456789 |
+|     103 | Amit Kumar    | 2012-03-10    | M      | 9988776655 |
+|     104 | Anjali Verma  | 2018-11-05    | F      | 9123450987 |
+|     105 | Rajesh Khanna | 2024-07-22    | M      | 9001122334 |
+|     106 | Sneha Patel   | 1997-04-18    | F      | 9876543210 |
+|     107 | Vikram Mehra  | 2017-12-02    | M      | 9123456789 |
+|     108 | Nisha Rao     | 2000-09-29    | F      | 9988776655 |
+|     109 | Anshul Koli   | 2022-05-15    | F      | 9876543210 |
+|     110 | Jaya Nair     | 2020-08-20    | F      | 9123456789 |
++---------+---------------+---------------+--------+------------+
+10 rows in set (0.00 sec)
+
+
+INSERT INTO vaccine_record VALUES
+(1, 101, 701, '2023-01-15', 'Completed'),
+(2, 102, 702, '2023-02-20', 'Completed'),
+(3, 103, 703, '2023-03-05', 'Completed'),
+(4, 104, 704, '2023-04-10', 'Pending'),
+(5, 105, 705, '2023-05-15', 'Scheduled');
+
+INSERT INTO vaccine_record VALUES
+(6, 106, 706, '2023-06-18', 'Completed'),
+(7, 107, 707, '2023-07-22', 'Scheduled');
+
+
+update vaccine_record set vaccination_date = null where status="pending" or status="scheduled";
+Query OK, 3 rows affected (0.12 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select*from vaccine_record;
++-----------+---------+------------+------------------+-----------+
+| record_id | benf_id | vaccine_id | vaccination_date | status    |
++-----------+---------+------------+------------------+-----------+
+|         1 |     101 |        701 | 2023-01-15       | Completed |
+|         2 |     102 |        702 | 2023-02-20       | Completed |
+|         3 |     103 |        703 | 2023-03-05       | Completed |
+|         4 |     104 |        704 | NULL             | Pending   |
+|         5 |     105 |        705 | NULL             | Scheduled |
+|         6 |     106 |        706 | 2023-06-18       | Completed |
+|         7 |     107 |        707 | NULL             | Scheduled |
++-----------+---------+------------+------------------+-----------+
+7 rows in set (0.00 sec)
+
+
+
+--------------------------QUEIRES:
+
+select*
+from benificiary natural join user
+where phone_no=9876543210;
+
+select*
+from vaccine_record natural join user 
+where phone_no=9876543210 and status="pending";
+-------------------------------------------------------------
+DELIMITER $$
+
+CREATE PROCEDURE GetApplicableVaccines(IN benf_id INT)
+BEGIN
+    -- Select all vaccines that are applicable to the beneficiary based on their age
+    SELECT v.vaccine_name, v.description, v.age_group
+    FROM vaccination v
+    JOIN benificiary b ON b.benf_id = benf_id
+    WHERE TIMESTAMPDIFF(YEAR, b.date_of_birth, CURDATE()) >= CAST(v.age_group AS DECIMAL)
+    ORDER BY v.age_group;
+END$$
+
+DELIMITER ;
+
+CALL GetApplicableVaccines(101);
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER update_vaccine_status_on_reminder
+AFTER INSERT ON reminders
+FOR EACH ROW
+BEGIN
+    -- Update the vaccine record status to 'Scheduled' when a reminder is set
+    UPDATE vaccine_record
+    SET status = 'Scheduled'
+    WHERE benf_id = NEW.benf_id
+      AND vaccine_id = NEW.vaccine_id
+      AND status != 'Completed';  -- Ensure we don't overwrite 'Completed' records
+END $$
+
+DELIMITER ;
+
+ select*from vaccine_record;
++-----------+---------+------------+------------------+-----------+
+| record_id | benf_id | vaccine_id | vaccination_date | status    |
++-----------+---------+------------+------------------+-----------+
+|         1 |     101 |        701 | 2023-01-15       | Completed |
+|         2 |     102 |        702 | 2023-02-20       | Completed |
+|         3 |     103 |        703 | 2023-03-05       | Completed |
+|         4 |     104 |        704 | NULL             | Pending   |
+|         5 |     105 |        705 | NULL             | Scheduled |
+|         6 |     106 |        706 | 2023-06-18       | Completed |
+|         7 |     107 |        707 | NULL             | Scheduled |
+|         8 |     108 |        703 | NULL             | Pending   |
+|         9 |     109 |        704 | NULL             | Pending   |
+|        10 |     110 |        705 | NULL             | Pending   |
+|        11 |     101 |        706 | NULL             | Pending   |
+|        12 |     102 |        707 | NULL             | Pending   |
++-----------+---------+------------+------------------+-----------+
+12 rows in set (0.07 sec)
+
+
+
+
